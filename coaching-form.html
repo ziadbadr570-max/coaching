@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Coaching — استمارة الاشتراك</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1D9E75;
+    --green-dark: #0F6E56;
+    --green-light: #E1F5EE;
+    --green-mid: #9FE1CB;
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #f8fffe;
+    --white: #ffffff;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    color: var(--text);
+  }
+
+  /* Background pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(29,158,117,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(29,158,117,0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+    animation: fadeDown 0.5s ease;
+  }
+
+  .logo-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green-light);
+    border: 1px solid var(--green-mid);
+    border-radius: 99px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
+  .header h1 {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .header h1 span { color: var(--green); }
+
+  .header p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Card */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 16px;
+    animation: fadeUp 0.5s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Progress */
+  .progress-wrap {
+    margin-bottom: 24px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .step-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  .step-count {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--green-light);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 99px;
+    transition: width 0.4s ease;
+  }
+
+  /* Step title */
+  .step-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .step-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 22px;
+    line-height: 1.5;
+  }
+
+  /* Fields */
+  .field { margin-bottom: 18px; }
+
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 7px;
+  }
+
+  .field label span {
+    color: var(--green);
+    margin-right: 2px;
+  }
+
+  .field input, .field textarea, .field select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: #fafafa;
+    transition: all 0.2s;
+    outline: none;
+  }
+
+  .field input:focus, .field textarea:focus {
+    border-color: var(--green);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(29,158,117,0.1);
+  }
+
+  .field textarea { min-height: 80px; resize: none; }
+
+  .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  /* Choice buttons */
+  .choices { display: flex; flex-direction: column; gap: 8px; }
+
+  .choice {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    color: var(--text);
+    background: #fafafa;
+    user-select: none;
+  }
+
+  .choice:hover { border-color: var(--green-mid); background: var(--green-light); }
+
+  .choice.selected {
+    border-color: var(--green);
+    background: var(--green-light);
+    color: var(--green-dark);
+    font-weight: 700;
+  }
+
+  .choice-radio {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .choice.selected .choice-radio {
+    border-color: var(--green);
+    background: var(--green);
+  }
+
+  .choice.selected .choice-radio::after {
+    content: '';
+    width: 6px; height: 6px;
+    background: white;
+    border-radius: 50%;
+  }
+
+  .choice-emoji { font-size: 18px; }
+  .choice-text { flex: 1; }
+  .choice-sub { font-size: 11px; color: var(--muted); font-weight: 400; margin-top: 1px; }
+
+  /* Buttons */
+  .btn-next {
+    width: 100%;
+    padding: 14px;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Cairo', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-next:hover { background: var(--green-dark); transform: translateY(-1px); }
+  .btn-next:active { transform: translateY(0); }
+  .btn-next:disabled { background: var(--green-mid); cursor: not-allowed; transform: none; }
+
+  .btn-back {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+
+  .btn-back:hover { border-color: var(--green-mid); color: var(--green); }
+
+  /* Error */
+  .error-msg {
+    font-size: 12px;
+    color: #dc2626;
+    margin-top: 6px;
+    display: none;
+  }
+
+  /* Result */
+  .result-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 28px;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .result-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
+  .result-avatar {
+    width: 48px; height: 48px;
+    background: var(--green-light);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .result-name { font-size: 17px; font-weight: 700; }
+  .result-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .result-body {
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--text);
+    white-space: pre-wrap;
+    min-height: 200px;
+  }
+
+  .loading-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+  }
+
+  .loading-dots span {
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+    40% { transform: scale(1.2); opacity: 1; }
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 99px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .badge-loading {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .badge-done {
+    background: var(--green-light);
+    color: var(--green-dark);
+  }
+
+  .action-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-action {
+    padding: 11px;
+    border-radius: var(--radius-sm);
+    font-family: 'Cairo', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--text);
+  }
+
+  .btn-action:hover { border-color: var(--green); color: var(--green); }
+
+  .btn-action.primary {
+    background: var(--green);
+    color: white;
+    border-color: var(--green);
+  }
+
+  .btn-action.primary:hover { background: var(--green-dark); }
+
+  /* Instapay notice */
+  .pay-notice {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #92400e;
+    margin-top: 16px;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  .pay-notice strong { display: block; font-size: 14px; margin-bottom: 4px; }
+
+  /* Steps */
+  .step { display: none; }
+  .step.active { display: block; }
+
+  /* Print */
+  @media print {
+    body { background: white; }
+    body::before { display: none; }
+    .action-btns { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-badge">
+      <div class="logo-dot"></div>
+      AI COACHING
+    </div>
+    <h1>خطتك المخصصة <span>بالذكاء الاصطناعي</span></h1>
+    <p>أجب على الأسئلة وهتاخد نظام غذائي وتمارين مخصص ليك خلال ثوانٍ</p>
+  </div>
+
+  <!-- Form Card -->
+  <div class="card" id="form-card">
+
+    <!-- Progress -->
+    <div class="progress-wrap">
+      <div class="progress-header">
+        <span class="step-label" id="step-label">الخطوة 1</span>
+        <span class="step-count" id="step-count">1 من 3</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 33%"></div>
+      </div>
+    </div>
+
+    <!-- Step 1: Basic Info -->
+    <div class="step active" id="step-1">
+      <div class="step-title">البيانات الأساسية</div>
+      <div class="step-sub">محتاجين نعرف بعض الأرقام عشان الخطة تبقى دقيقة</div>
+
+      <div class="field">
+        <label><span>*</span> الاسم الكامل</label>
+        <input type="text" id="name" placeholder="اكتب اسمك هنا...">
+        <div class="error-msg" id="err-name">من فضلك اكتب اسمك</div>
+      </div>
+
+      <div class="field">
+        <label><span>*</span> رقم الواتساب</label>
+        <input type="tel" id="phone" placeholder="01xxxxxxxxx">
+        <div class="error-msg" id="err-phone">من فضلك اكتب رقم واتساب صحيح</div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label><span>*</span> العمر</label>
+          <input type="number" id="age" placeholder="مثال: 22" min="10" max="70">
+          <div class="error-msg" id="err-age">اكتب عمرك</div>
+        </div>
+        <div class="field">
+          <label><span>*</span> الجنس</label>
+          <select id="gender">
+            <option value="">اختر...</option>
+            <option value="ذكر">ذكر</option>
+            <option value="أنثى">أنثى</option>
+          </select>
+          <div class="error-msg" id="err-gender">اختر الجنس</div>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label><span>*</span> الطول (سم)</label>
+          <input type="number" id="height" placeholder="مثال: 175" min="130" max="220">
+          <div class="error-msg" id="err-height">اكتب طولك</div>
+        </div>
+        <div class="field">
+          <label><span>*</span> الوزن (كيلو)</label>
+          <input type="number" id="weight" placeholder="مثال: 70" min="30" max="200">
+          <div class="error-msg" id="err-weight">اكتب وزنك</div>
+        </div>
+      </div>
+
+      <button class="btn-next" onclick="goStep(2)">التالي ←</button>
+    </div>
+
+    <!-- Step 2: Goals -->
+    <div class="step" id="step-2">
+      <div class="step-title">أهدافك وتفاصيلك</div>
+      <div class="step-sub">الإجابات دي هتحدد شكل الخطة بالكامل</div>
+
+      <div class="field">
+        <label><span>*</span> هدفك الأساسي</label>
+        <div class="choices" id="goal-choices">
+          <div class="choice" onclick="selectChoice(this,'goal')">
+            <span class="choice-emoji">💪</span>
+            <div class="choice-text">
+              تضخيم
+              <div class="choice-sub">زيادة الكتلة العضلية وبناء الجسم</div>
+            </div>
+            <div class="choice-radio"></div>
+          </div>
+          <div class="choice" onclick="selectChoice(this,'goal')">
+            <span class="choice-emoji">🔥</span>
+            <div class="choice-text">
+              تنشيف
+              <div class="choice-sub">حرق الدهون والحصول على قوام رياضي</div>
+            </div>
+            <div class="choice-radio"></div>
+          </div>
+          <div class="choice" onclick="selectChoice(this,'goal')">
+            <span class="choice-emoji">⚡</span>
+            <div class="choice-text">
+              لياقة عامة
+              <div class="choice-sub">تحسين الصحة والنشاط اليومي</div>
+            </div>
+            <div class="choice-radio"></div>
+          </div>
+        </div>
+        <div class="error-msg" id="err-goal">اختر هدفك</div>
+      </div>
+
+      <div class="field">
+        <label><span>*</span> بتتمرن فين؟</label>
+        <div class="choices" id="gym-choices">
+          <div class="choice" onclick="selectChoice(this,'gym')">
+            <span class="choice-emoji">🏋️</span>
+            <div class="choice-text">
+              جيم
+              <div class="choice-sub">عندي وصول لأجهزة وأثقال</div>
+            </div>
+            <div class="choice-radio"></div>
+          </div>
+          <div class="choice" onclick="selectChoice(this,'gym')">
+            <span class="choice-emoji">🏠</span>
+            <div class="choice-text">
+              في البيت
+              <div class="choice-sub">تمارين بدون معدات أو أدوات بسيطة</div>
+            </div>
+            <div class="choice-radio"></div>
+          </div>
+        </div>
+        <div class="error-msg" id="err-gym">اختر مكان التمرين</div>
+      </div>
+
+      <div class="field">
+        <label><span>*</span> كام وجبة في اليوم؟</label>
+        <div class="choices" id="meals-choices">
+          <div class="choice" onclick="selectChoice(this,'meals')">
+            <div class="choice-text">3 وجبات</div>
+            <div class="choice-radio"></div>
+          </div>
+          <div class="choice" onclick="selectChoice(this,'meals')">
+            <div class="choice-text">4 وجبات</div>
+            <div class="choice-radio"></div>
+          </div>
+          <div class="choice" onclick="selectChoice(this,'meals')">
+            <div class="choice-text">5 وجبات</div>
+            <div class="choice-radio"></div>
+          </div>
+        </div>
+        <div class="error-msg" id="err-meals">اختر عدد الوجبات</div>
+      </div>
+
+      <button class="btn-next" onclick="goStep(3)">التالي ←</button>
+      <button class="btn-back" onclick="goStep(1)">← رجوع</button>
+    </div>
+
+    <!-- Step 3: Health -->
+    <div class="step" id="step-3">
+      <div class="step-title">الصحة والملاحظات</div>
+      <div class="step-sub">المعلومات دي مهمة عشان الخطة تبقى آمنة ومناسبة ليك</div>
+
+      <div class="field">
+        <label>هل عندك أي مشاكل صحية أو إصابات؟</label>
+        <textarea id="health" placeholder="مثال: آلام في الركبة، ضغط مرتفع... أو اكتب 'لا يوجد'"></textarea>
+      </div>
+
+      <div class="field">
+        <label>هل عندك حساسية من أكل معين؟</label>
+        <textarea id="allergies" placeholder="مثال: حساسية من الألبان، لا آكل لحوم... أو اكتب 'لا يوجد'"></textarea>
+      </div>
+
+      <div class="field">
+        <label>أي ملاحظة تانية تحب تضيفها؟</label>
+        <textarea id="notes" placeholder="أي معلومة تفيد الكوتش في تخصيص خطتك..."></textarea>
+      </div>
+
+      <button class="btn-next" onclick="generatePlan()" id="generate-btn">
+        <span>✨</span> ولّد خطتي الآن
+      </button>
+      <button class="btn-back" onclick="goStep(2)">← رجوع</button>
+    </div>
+  </div>
+
+  <!-- Result Card -->
+  <div class="result-card" id="result-card" style="display:none">
+    <div class="result-header">
+      <div class="result-avatar">💪</div>
+      <div>
+        <div class="result-name" id="result-name">خطتك جاهزة!</div>
+        <div class="result-sub" id="result-sub">نظام غذائي + تمارين مخصص بالذكاء الاصطناعي</div>
+      </div>
+    </div>
+
+    <div id="status-badge" class="status-badge badge-loading">
+      <span>⏳</span> جاري التوليد...
+    </div>
+
+    <div class="result-body" id="result-body">
+      <div class="loading-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="action-btns" id="action-btns" style="display:none">
+      <button class="btn-action" onclick="window.print()">🖨️ طباعة PDF</button>
+      <button class="btn-action" onclick="copyResult()">📋 نسخ النص</button>
+      <button class="btn-action primary" onclick="sendWhatsapp()" style="grid-column: span 2">
+        📱 إرسال على واتساب
+      </button>
+    </div>
+
+    <div class="pay-notice" id="pay-notice" style="display:none">
+      <strong>⚡ خطوة أخيرة — إتمام الدفع</strong>
+      لاستلام خطتك وبدء متابعتك اليومية، من فضلك أتم الدفع عبر InstaPay
+    </div>
+  </div>
+
+</div>
+
+<script>
+const state = { goal: '', gym: '', meals: '' };
+
+function goStep(n) {
+  if (n > 1 && !validateStep(n-1)) return;
+  [1,2,3].forEach(i => {
+    document.getElementById('step-'+i).classList.toggle('active', i===n);
+  });
+  const labels = ['البيانات الأساسية','أهدافك وتفاصيلك','الصحة والملاحظات'];
+  document.getElementById('step-label').textContent = 'الخطوة ' + n;
+  document.getElementById('step-count').textContent = n + ' من 3';
+  document.getElementById('progress-fill').style.width = (n * 33.33) + '%';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function validateStep(n) {
+  let ok = true;
+  if (n === 1) {
+    const checks = [
+      { id: 'name', err: 'err-name', test: v => v.trim().length > 1 },
+      { id: 'phone', err: 'err-phone', test: v => /^0[0-9]{10}$/.test(v.trim()) },
+      { id: 'age', err: 'err-age', test: v => v >= 10 && v <= 70 },
+      { id: 'gender', err: 'err-gender', test: v => v !== '' },
+      { id: 'height', err: 'err-height', test: v => v >= 130 && v <= 220 },
+      { id: 'weight', err: 'err-weight', test: v => v >= 30 && v <= 200 },
+    ];
+    checks.forEach(c => {
+      const el = document.getElementById(c.id);
+      const errEl = document.getElementById(c.err);
+      const valid = c.test(el.value);
+      errEl.style.display = valid ? 'none' : 'block';
+      if (!valid) { ok = false; el.focus(); }
+    });
+  }
+  if (n === 2) {
+    ['goal','gym','meals'].forEach(k => {
+      const errEl = document.getElementById('err-'+k);
+      const valid = state[k] !== '';
+      errEl.style.display = valid ? 'none' : 'block';
+      if (!valid) ok = false;
+    });
+  }
+  return ok;
+}
+
+function selectChoice(el, group) {
+  const parent = el.closest('.choices');
+  parent.querySelectorAll('.choice').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state[group] = el.querySelector('.choice-text').childNodes[0].textContent.trim();
+  document.getElementById('err-'+group).style.display = 'none';
+}
+
+async function generatePlan() {
+  if (!validateStep(2)) { goStep(2); return; }
+
+  const name = document.getElementById('name').value.trim();
+  const age = document.getElementById('age').value;
+  const gender = document.getElementById('gender').value;
+  const height = document.getElementById('height').value;
+  const weight = document.getElementById('weight').value;
+  const health = document.getElementById('health').value.trim() || 'لا يوجد';
+  const allergies = document.getElementById('allergies').value.trim() || 'لا يوجد';
+  const notes = document.getElementById('notes').value.trim() || 'لا يوجد';
+
+  document.getElementById('form-card').style.display = 'none';
+  document.getElementById('result-card').style.display = 'block';
+  document.getElementById('result-name').textContent = 'مرحباً ' + name + '!';
+
+  const prompt = `أنت كوتش تغذية ولياقة بدنية محترف ومتخصص. بناءً على البيانات التالية، أنشئ خطة متكاملة ومفصلة.
+
+بيانات العميل:
+- الاسم: ${name}
+- العمر: ${age} سنة
+- الجنس: ${gender}
+- الطول: ${height} سم
+- الوزن: ${weight} كيلو
+- الهدف: ${state.goal}
+- مكان التمرين: ${state.gym}
+- عدد الوجبات: ${state.meals}
+- مشاكل صحية: ${health}
+- حساسية غذائية: ${allergies}
+- ملاحظات: ${notes}
+
+اكتب الخطة بالعربي بشكل منظم يتضمن:
+
+📊 تحليل سريع (السعرات المطلوبة + نسب البروتين والكارب والدهون)
+
+🍽️ الخطة الغذائية اليومية (${state.meals} مع الكميات بالجرام)
+
+🏋️ برنامج التمارين الأسبوعي (4 أيام مع التمارين والمجموعات والتكرارات)
+
+💡 3 نصائح مخصصة لحالة ${name} تحديداً
+
+اجعل الخطة واقعية وقابلة للتطبيق لشخص عمره ${age} سنة في مصر.`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await res.json();
+    const text = data.content.map(i => i.text || '').join('\n');
+
+    document.getElementById('result-body').textContent = text;
+    document.getElementById('status-badge').className = 'status-badge badge-done';
+    document.getElementById('status-badge').innerHTML = '<span>✅</span> الخطة جاهزة!';
+    document.getElementById('action-btns').style.display = 'grid';
+    document.getElementById('pay-notice').style.display = 'block';
+    window._planText = text;
+    window._clientPhone = document.getElementById('phone').value.trim();
+
+  } catch (e) {
+    document.getElementById('result-body').textContent = 'حصل خطأ في التوليد، حاول تاني من فضلك.';
+    document.getElementById('status-badge').innerHTML = '<span>❌</span> حصل خطأ';
+  }
+}
+
+function copyResult() {
+  if (window._planText) {
+    navigator.clipboard.writeText(window._planText);
+    alert('تم نسخ الخطة!');
+  }
+}
+
+function sendWhatsapp() {
+  const phone = window._clientPhone || '';
+  const text = encodeURIComponent('مرحباً! 🎉 خطتك المخصصة جاهزة:\n\n' + (window._planText || ''));
+  const url = phone
+    ? `https://wa.me/2${phone}?text=${text}`
+    : `https://wa.me/?text=${text}`;
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>
